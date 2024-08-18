@@ -1,24 +1,35 @@
 <?php
 /*
 Plugin Name: Simple Twitter Auto Publish
-Description: Automatically publishes WordPress posts to Twitter.
+Description: Adds a custom dashboard widget to display Twitter API integration status.
 Version: 1.0
-Author: Prabin Singh Thakuri
-Author URI: https://starbiographer.com
+Author: Your Name
+Author URI: https://yourwebsite.com
 */
 
-// Include necessary files
-require_once plugin_dir_path(__FILE__) . 'admin/settings.php';
-
-// Activation hook
-function simple_twitter_auto_publish_activate() {
-    // Register settings
-    register_setting('simple_twitter_auto_publish_settings', 'simple_twitter_auto_publish_options');
+function my_plugin_dashboard_widget() {
+    ?>
+    <div class="my-plugin-widget">
+        <?php
+        $integration_status = get_option('my_plugin_twitter_integration_status');
+        switch ($integration_status) {
+            case 'connected':
+                echo 'Twitter API connected successfully!';
+                break;
+            case 'connecting':
+                echo 'Connecting to Twitter...';
+                break;
+            default:
+                echo 'Twitter API not connected. Please configure settings.';
+        }
+        ?>
+    </div>
+    <?php
 }
-register_activation_hook(__FILE__, 'simple_twitter_auto_publish_activate');
+add_action('wp_dashboard_add_meta_box', 'my_plugin_dashboard_widget');
 
-// Deactivation hook
-function simple_twitter_auto_publish_deactivate() {
-    // Delete options or perform other cleanup tasks
+// Function to verify Twitter API integration (to be called periodically)
+function my_plugin_verify_twitter_integration() {
+    // Logic to check API credentials and update integration status
 }
-register_deactivation_hook(__FILE__, 'simple_twitter_auto_publish_deactivate');
+add_action('my_plugin_verify_integration_hook', 'my_plugin_verify_twitter_integration'); // Replace with your cron hook or AJAX action
